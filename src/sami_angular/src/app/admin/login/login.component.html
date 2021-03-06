@@ -29,6 +29,12 @@
                     <button mat-raised-button class="control" (click)="register()">
                         Register
                     </button>
+                    <button mat-raised-button class="control" (click)="test()">
+                        test
+                    </button>
+                    <button mat-raised-button class="control" (click)="test2()">
+                        test2
+                    </button>
                 </ng-container>
 
                 <ng-container *ngIf="loggingIn">
@@ -41,6 +47,6 @@
     </mat-card>
 
     <ng-container *ngIf="registeringUser">
-        <app-registration (registeringUser)="isRegistering($event)"></app-registration>
+        <app-registration (cancelRegister)="cancelRegister()"></app-registration>
     </ng-container>
 </div>

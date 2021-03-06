@@ -2,48 +2,52 @@ import { environment } from "../../../environments/environment";
 
 import { Injectable } from "@angular/core";
 
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
 import { CookieService } from "ngx-cookie-service";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  private httpOptions = {
-    headers: new HttpHeaders({
-      "Content-Type": "application/json",
-    }),
-  };
+  private username;
 
-  private currentUser;
+  constructor(
+    private http: HttpClient, 
+    private cookieService: CookieService, 
+    private router: Router
+    ) {}
 
-  private authenticated = false;
-  private authToken = { access: null, refresh: null };
+  //'api/token/'
+  //'api/token/refresh/'
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  test(): Observable<any> {
+    return this.http.post(environment.apiUrl + 'api/token/', { "username": "testuser", "password": "testpassword" })
+    .pipe(
+      catchError((err) => {
+        return of({ error: "failed to register user!" });
+      })
+    );
+  }
+  test2(): Observable<any> {
+    return this.http.post(environment.apiUrl + 'api/token/refresh/', { "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE1MDc0Nzk2LCJqdGkiOiI4NzFjMTgwOWY2NWQ0ZGJhYTY2ZmY4NzRmZmQzNDVhYyIsInVzZXJfaWQiOjN9.a2yVZ-pyCWSNVLEhg4kcRdqCzQWVQuhQSzwUo_ER--8" })
+    .pipe(
+      catchError((err) => {
+        return of({ error: "failed to refresh token!" });
+      })
+    );
+  }
 
-  // POST/auth/users/ - endpoint that allows registration of new users
-  // required params - username, password
-  // No authentication required
-  registerNewUser(
-    username: string,
-    password: string,
-    firstname: string,
-    lastname: string,
-    email: string
-  ): Observable<any> {
+  registerNewUser(username: string, password: string, email: string): Observable<any> {
     const newUser = {
       username,
       password,
-      firstname,
-      lastname,
       email,
     };
-    return this.http
-      .post<any>(environment.apiUrl + "auth/users/", newUser, this.httpOptions)
+    return this.http.post<any>(environment.apiUrl + "auth/users/", newUser)
       .pipe(
         catchError((err) => {
           return of({ error: "failed to register user!" });
@@ -51,46 +55,34 @@ export class AuthService {
       );
   }
 
-  // POST/users/authenticate - logs in user and returns access and refresh jwt tokens
-  // required params - username, password
-  // No authentication required
   login(username: string, password: string): Observable<any> {
     const login = {
       username,
       password,
     };
-    return this.http
-      .post<any>(
-        environment.apiUrl + "auth/jwt/create/",
-        login,
-        this.httpOptions
-      )
+    return this.http.post<any>(environment.apiUrl + "api/token/", login)
       .pipe(
         tap((response: any) => {
-          this.setToken(response.access, response.refresh);
+          this.cookieService.set('JWT_TOKEN', response.access);
+          this.cookieService.set('JWT_REFRESH_TOKEN', response.refresh);
+          this.router.navigateByUrl('home');
         }),
         catchError((err) => {
-          // need better error messaging
           return of({ error: "falied to login user!" });
         })
       );
   }
 
-  // nulls user, JWTs, and cookies, sets authenticeted to false
   logout(): void {
-    this.authenticated = false;
-    this.authToken = { access: null, refresh: null };
-    this.cookieService.set("JWT_TOKEN", null);
-    this.cookieService.set("JWT_REFRESH_TOKEN", null);
-    this.currentUser = null;
+    this.cookieService.deleteAll();
+    this.username = '';
+    this.router.navigateByUrl('');
   }
 
-  // GET/auth/users/me/ - endpoint that gets current active user
-  // required params - needs jwt accept token
   getUser(): Observable<any> {
     return this.http.get(environment.apiUrl + "auth/users/me/").pipe(
       tap((user) => {
-        this.currentUser = user;
+        this.username = user;
       }),
       catchError((err) => {
         return of({ error: "failed to retrieve user!" });
@@ -99,38 +91,18 @@ export class AuthService {
   }
 
   getUsername(): string {
-    let username = "";
-    if (this.currentUser) {
-      username = this.currentUser["username"];
-    }
-    return username;
-  }
-
-  setToken(token, rToken) {
-    this.authToken = {
-      access: token,
-      refresh: rToken,
-    };
-    this.cookieService.set("JWT_TOKEN", token);
-    this.cookieService.set("JWT_REFRESH_TOKEN", rToken);
-    this.authenticated = true;
+    return this.username;
   }
 
   userIsAuthenticated(): boolean {
-    return this.authenticated;
+    return this.cookieService.check('JWT_TOKEN');
   }
 
   getToken(): string {
-    return this.authToken.access;
+    return this.cookieService.get('JWT_TOKEN');
   }
 
   getAuthRefreshToken(): string {
-    return this.authToken.refresh;
-  }
-
-  checkForStoredToken(token, rToken): void {
-    if (token && token !== null && token !== "null") {
-      this.setToken(token, rToken);
-    }
+    return this.cookieService.get('JWT_REFRESH_TOKEN"');
   }
 }

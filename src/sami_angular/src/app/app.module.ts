@@ -42,6 +42,7 @@ import { NavigationComponent } from "./navigation/navigation.component";
 import { AddMapComponent } from "./home/add-map/add-map.component";
 import { UploadComponent } from './upload/upload.component';
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
+import { HeaderInterceptor } from "./interceptors/header.interceptor";
 
 @NgModule({
   declarations: [
@@ -87,6 +88,11 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeaderInterceptor,
       multi: true
     },
   ],

@@ -73,12 +73,12 @@ export class MapService {
     private componentFactoryResolver: ComponentFactoryResolver,
     private injector: Injector
   ) {
-    this.getHoustonShape().subscribe((poly) => {
-      this.houstonPoly = poly;
-    });
-    this.getNolaShape().subscribe((poly) => {
-      this.nolaPoly = poly;
-    });
+    // this.getHoustonShape().subscribe((poly) => {
+    //   this.houstonPoly = poly;
+    // });
+    // this.getNolaShape().subscribe((poly) => {
+    //   this.nolaPoly = poly;
+    // });
   }
 
   ngOnInit() {}
@@ -609,11 +609,11 @@ export class MapService {
   }
 
   // called by the constructor to pre-load shape files
-  getNolaShape(): Observable<any> {
-    return this.http.get("../../assets/data/nolaPoly.json");
-  }
+  // getNolaShape(): Observable<any> {
+  //   return this.http.get("../../assets/data/nolaPoly.json");
+  // }
 
-  getHoustonShape(): Observable<any> {
-    return this.http.get("../../assets/data/houstonPoly.json");
-  }
+  // getHoustonShape(): Observable<any> {
+  //   return this.http.get("../../assets/data/houstonPoly.json");
+  // }
 }

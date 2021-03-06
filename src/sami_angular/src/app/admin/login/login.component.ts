@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { AuthService } from "../../services/auth/auth.service";
-import { MapService } from "../../services/map.service";
 
 @Component({
   selector: "app-login",
@@ -10,13 +9,12 @@ import { MapService } from "../../services/map.service";
   styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
-  loggingIn: boolean;
+  loggingIn: boolean; // state variable for progress indicatior
+  registeringUser = false; // flag for registration panel
   errorMessage: string;
-  registeringUser = false;
 
   constructor(
     private auth: AuthService,
-    public mapService: MapService,
     private router: Router
   ) {}
 
@@ -30,32 +28,34 @@ export class LoginComponent implements OnInit {
       alert("Username and Password are required");
       return;
     }
-
     this.loggingIn = true;
-    this.errorMessage = "";
     this.auth.login(username.value, password.value).subscribe((response) => {
-      this.handleLoginResponse(response);
-    });
-  }
-
-  handleLoginResponse(response): void {
-    // this endpoint returns a SimpleJWT object on success
-    this.loggingIn = false;
-    if (response.error) {
-      console.log("Error:loginResponse: " + response.error);
-      this.errorMessage = response.error;
-    } else {
-      this.auth.getUser().subscribe((user) => {
+      this.loggingIn = false;
+      if (response.error) {
+        this.errorMessage = response.error;
+      } else {
         this.router.navigateByUrl("/home");
-      });
-    }
+      }
+    });
   }
 
   register(): void {
     this.registeringUser = true;
   }
 
-  isRegistering($event): void {
-    this.registeringUser = $event;
+  // listening for an event from resistration component
+  cancelRegister(): void {
+    this.registeringUser = false;
+  }
+
+  test() {
+    this.auth.test().subscribe((response) => {
+      console.log("response: ", response);
+    });  
+  }
+  test2() {
+    this.auth.test2().subscribe((response) => {
+      console.log("response: ", response);
+    });  
   }
 }

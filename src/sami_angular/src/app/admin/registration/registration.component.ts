@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./registration.component.scss"]
 })
 export class RegistrationComponent implements OnInit {
-  @Output() registeringUser = new EventEmitter<boolean>();
+  @Output() cancelRegister = new EventEmitter<boolean>();
   waitingForResponse: boolean;
   errorMessage: string;
 
@@ -23,8 +23,6 @@ export class RegistrationComponent implements OnInit {
   registerUser(
     username: HTMLInputElement,
     password: HTMLInputElement,
-    firstname?: HTMLInputElement,
-    lastname?: HTMLInputElement,
     email?: HTMLInputElement
   ) {
     if (username.value.length < 1 || password.value.length < 1) {
@@ -33,44 +31,13 @@ export class RegistrationComponent implements OnInit {
     }
     this.waitingForResponse = true;
     this.errorMessage = "";
-    this.auth
-      .registerNewUser(
-        username.value,
-        password.value,
-        "unknown",
-        "unknown",
-        ""
-      )
+    this.auth.registerNewUser(username.value, password.value, email.value)
       .subscribe(response => {
-        this.handleRegisterResponse(response, username.value, password.value);
+        this.router.navigateByUrl("/home");
       });
-  }
-
-  handleRegisterResponse(response, username, password): void {
-    // this endpoint returns a null response on success
-    this.waitingForResponse = false;
-    if (response) {
-      if (response.error) {
-        this.errorMessage = "Failed to register user!";
-      } else {
-        // should never get here
-        console.log("response not null and no error: " + response);
-        this.cancel();
-      }
-    } else {
-      // registration successful, log in user
-      this.auth.login(username, password).subscribe(res => {
-        if (res.error) {
-          this.errorMessage = "Registered new user, but auto login failed";
-        } else {
-          this.cancel();
-          this.router.navigateByUrl("/home");
-        }
-      });
-    }
   }
 
   cancel(): void {
-    this.registeringUser.emit(false);
+    this.cancelRegister.emit(false);
   }
 }

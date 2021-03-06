@@ -13,8 +13,11 @@ export class HomeComponent {
 
   addingMap = false;
 
-  constructor(private router: Router, private mapService: MapService) {
-    this.getMaps();
+  constructor(
+    private router: Router, 
+    private mapService: MapService
+    ) {
+    
   }
 
   addMap(): void {

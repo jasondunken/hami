@@ -15,7 +15,7 @@ export class RouteGuardService implements CanActivate {
     if (this.auth.userIsAuthenticated()) {
       return true;
     }
-    this.router.navigate(['login']);
+    this.router.navigate(['']);
     return false;
   }
 }

@@ -9,10 +9,8 @@ import { RouteGuardService as RouteGuard } from './services/auth/route-guard.ser
 /////Login has been switched to the form component for development purposes
 const routes: Routes = [
   { path: "", component: LoginComponent },
-  { path: "log-in", component: LoginComponent },
   { path: "home", component: HomeComponent, canActivate: [RouteGuard]  },
-  { path: "map/:id", component: MapComponent, canActivate: [RouteGuard]  },
-  { path: "login", component: LoginComponent, canActivate: [RouteGuard]  }
+  { path: "map/:id", component: MapComponent, canActivate: [RouteGuard]  }
 ];
 
 @NgModule({
