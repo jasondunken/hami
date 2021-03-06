@@ -10,8 +10,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from locations.models import Map, Source
-from locations.serializers import UserSerializer, SourceSerializer, MapSerializer, NewMapSerializer
+from api.models import Map, Source
+from api.serializers import UserSerializer, SourceSerializer, MapSerializer, NewMapSerializer
 
 
 @api_view(['GET'])

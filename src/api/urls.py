@@ -1,6 +1,6 @@
 from django.urls import path
 
-from locations import api
+from api import api
 from . import views
 
 
