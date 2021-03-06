@@ -6,7 +6,7 @@ import { HomeComponent } from "./home/home.component";
 
 /////Login has been switched to the form component for development purposes
 const routes: Routes = [
-  { path: "home", component: HomeComponent },
+  { path: "", component: HomeComponent },
   { path: "map/:id", component: MapComponent },
   { path: "login", component: LoginComponent },
   // { path: '**', redirectTo: "/" }

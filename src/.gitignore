@@ -138,4 +138,5 @@ db.sqlite3
 .idea
 
 static/
-sami_angular/sami-mgr/node_modules/
+sami_angular/node_modules/
+sami_angular/.editorconfig
