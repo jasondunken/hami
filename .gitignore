@@ -4,11 +4,13 @@
 /dist
 /tmp
 /out-tsc
+src/static
+
 # Only exists if Bazel was run
 /bazel-out
 
 # dependencies
-*/node_modules
+src/sami_angular/node_modules/
 
 # profiling files
 chrome-profiler-events*.json
@@ -32,7 +34,7 @@ speed-measure-plugin*.json
 !.vscode/extensions.json
 .history/*
 
-/src/sami_angular/sami-mgr/.editorconfig
+src/sami_angular/.editorconfig
 
 # misc
 /.sass-cache
@@ -43,10 +45,13 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+src/locations/__pycache__/
+src/samiapp/__pycache__/
 
 # System Files
 .DS_Store
 Thumbs.db
+src/debug.log
 
 # Django migrations
 /src/locations/migrations/
