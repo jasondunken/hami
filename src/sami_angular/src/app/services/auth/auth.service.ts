@@ -1,4 +1,4 @@
-import { environment } from "../../environments/environment";
+import { environment } from "../../../environments/environment";
 
 import { Injectable } from "@angular/core";
 
@@ -88,13 +88,7 @@ export class AuthService {
   // GET/auth/users/me/ - endpoint that gets current active user
   // required params - needs jwt accept token
   getUser(): Observable<any> {
-    const options = {
-      headers: new HttpHeaders({
-        Authorization: "Bearer " + this.getAuthToken(),
-        "Content-Type": "application/json",
-      }),
-    };
-    return this.http.get(environment.apiUrl + "auth/users/me/", options).pipe(
+    return this.http.get(environment.apiUrl + "auth/users/me/").pipe(
       tap((user) => {
         this.currentUser = user;
       }),
@@ -126,7 +120,7 @@ export class AuthService {
     return this.authenticated;
   }
 
-  getAuthToken(): string {
+  getToken(): string {
     return this.authToken.access;
   }
 

@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -41,6 +41,7 @@ import { SettingsComponent } from "./settings/settings.component";
 import { NavigationComponent } from "./navigation/navigation.component";
 import { AddMapComponent } from "./home/add-map/add-map.component";
 import { UploadComponent } from './upload/upload.component';
+import { AuthInterceptor } from "./interceptors/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -82,7 +83,13 @@ import { UploadComponent } from './upload/upload.component';
     MatRadioModule,
   ],
   entryComponents: [FormComponent],
-  providers: [CookieService],
+  providers: [CookieService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

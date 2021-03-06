@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { UserMap } from "../models/maps.model";
 import { Source } from "../models/sources.model";
@@ -13,7 +12,7 @@ import * as turf from "@turf/turf";
 export class UtilityService {
   public myMaps: UserMap[] = [];
   public sources: Source[] = [];
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   SOURCE_TYPES = ["School", "Hospital", "WW Treatment", "Cemetery"];
 

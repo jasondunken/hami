@@ -6,23 +6,15 @@ import { timeout, catchError, tap } from "rxjs/operators";
 
 import { environment } from "src/environments/environment";
 
-import { AuthService } from "../services/auth.service";
-
 @Injectable({
   providedIn: "root",
 })
 export class UploaderService {
-  constructor(private http: HttpClient, private auth: AuthService) {}
+  constructor(private http: HttpClient) {}
 
   addSource(source): Observable<any> {
-    const options = {
-      headers: new HttpHeaders({
-        Authorization: "Bearer " + this.auth.getAuthToken(),
-        "Content-Type": "application/json",
-      }),
-    };
     return this.http
-      .post(environment.apiUrl + "api/sources/" + Map + "/", source, options)
+      .post(environment.apiUrl + "api/sources/" + Map + "/", source)
       .pipe(
         timeout(5000),
         tap(),

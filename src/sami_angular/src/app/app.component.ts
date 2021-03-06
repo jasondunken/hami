@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { AuthService } from "./services/auth.service";
 
 @Component({
   selector: "app-root",
@@ -7,11 +6,7 @@ import { AuthService } from "./services/auth.service";
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-  title = "sami-mgr";
+  title = "HAMI";
 
-  constructor(private auth: AuthService) {}
-
-  userIsAuthenticated(): boolean {
-    return this.auth.userIsAuthenticated();
-  }
+  constructor() {}
 }

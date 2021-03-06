@@ -11,7 +11,6 @@ import * as d3 from "d3";
 
 import { environment } from "src/environments/environment";
 
-import { AuthService } from "../services/auth.service";
 import { UtilityService } from "../services/utility.service";
 
 import { Source } from "../models/sources.model";
@@ -71,7 +70,6 @@ export class MapService {
   constructor(
     private http: HttpClient,
     private utilityService: UtilityService,
-    private auth: AuthService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private injector: Injector
   ) {
@@ -187,12 +185,6 @@ export class MapService {
     shapeFilePath: string,
     featureFilePath: string
   ): Observable<any> {
-    const options = {
-      headers: new HttpHeaders({
-        Authorization: "Bearer " + this.auth.getAuthToken(),
-        "Content-Type": "application/json",
-      }),
-    };
     const newMap = {
       mapName,
       area,
@@ -200,7 +192,7 @@ export class MapService {
       featureFilePath,
     };
     return this.http
-      .post<any>(environment.apiUrl + "api/maps/", newMap, options)
+      .post<any>(environment.apiUrl + "api/maps/", newMap)
       .pipe(
         tap((response) => {
           let userMap = { ...response };
@@ -288,13 +280,7 @@ export class MapService {
 
   // http call to get user maps data
   getUserMaps(): Observable<any> {
-    const options = {
-      headers: new HttpHeaders({
-        Authorization: "Bearer " + this.auth.getAuthToken(),
-        "Content-Type": "application/json",
-      }),
-    };
-    return this.http.get<any>(environment.apiUrl + "api/maps/", options).pipe(
+    return this.http.get<any>(environment.apiUrl + "api/maps/").pipe(
       timeout(5000),
       tap((maps) => {
         this.maps = [...maps];
@@ -321,14 +307,8 @@ export class MapService {
 
   // http call to get source features data for map
   getActiveMapSources(mapID: string): Observable<any> {
-    const options = {
-      headers: new HttpHeaders({
-        Authorization: "Bearer " + this.auth.getAuthToken(),
-        "Content-Type": "application/json",
-      }),
-    };
     return this.http
-      .get<any>(environment.apiUrl + "api/sources/" + mapID + "/", options)
+      .get<any>(environment.apiUrl + "api/sources/" + mapID + "/")
       .pipe(
         // timeout(5000),
         tap((response) => {
