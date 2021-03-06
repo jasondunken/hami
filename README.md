@@ -1,1 +1,1 @@
-## Heat-mapping app, Django backend and Angular frontend.
+## Heat-mapping app, Django backend / Angular frontend.
