@@ -9,15 +9,12 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class HeaderInterceptor implements HttpInterceptor {
-
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (request.body) {
-      request = request.clone({ 
-        setHeaders: { "content-type": "application/json" }
-      });
-    }
+    request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
+    request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
+    console.log("REQUEST_AFTER>>> ", request);
     return next.handle(request);
   }
 }

@@ -13,18 +13,12 @@ import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
   constructor(
     private auth: AuthService
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("REQUEST>>> ", request);
-    
     request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + this.auth.getToken()) });
-    request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
-    request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
-    console.log("REQUEST_AFTER>>> ", request);
 
     return next.handle(request)
     // .pipe(

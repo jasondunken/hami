@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthService } from "../services/auth/auth.service";
 
 import { MapService } from "../services/map.service";
 
@@ -15,9 +16,14 @@ export class HomeComponent {
 
   constructor(
     private router: Router, 
-    private mapService: MapService
-    ) {
-    
+    private mapService: MapService,
+    private auth: AuthService
+    ) {}
+
+  ngOnInit() {
+    this.auth.getUser().subscribe((response) => {
+      console.log('response ', response)
+    })
   }
 
   addMap(): void {

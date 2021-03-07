@@ -34,7 +34,12 @@ export class LoginComponent implements OnInit {
       if (response.error) {
         this.errorMessage = response.error;
       } else {
-        this.router.navigateByUrl("/home");
+        this.auth.refreshToken().subscribe((response) => {
+          if (response.error) {
+            this.errorMessage = response.error;
+          } else {
+            this.router.navigateByUrl("home");}
+        })
       }
     });
   }
@@ -46,16 +51,5 @@ export class LoginComponent implements OnInit {
   // listening for an event from resistration component
   cancelRegister(): void {
     this.registeringUser = false;
-  }
-
-  test() {
-    this.auth.test().subscribe((response) => {
-      console.log("response: ", response);
-    });  
-  }
-  test2() {
-    this.auth.test2().subscribe((response) => {
-      console.log("response: ", response);
-    });  
   }
 }
